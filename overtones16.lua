@@ -1138,4 +1138,3 @@ function grid_redraw()
   end
   g:refresh()
 end
-

@@ -105,21 +105,20 @@ Engine_Overtones16 : CroneEngine {
 			morphMix = LinSelectX.kr( morphMixVal, [morphLfo, morphRand, morphEnv] );
 			clippedMorph = morphMix.clip( 0, oscPresets.size - 1 );
 
-			// Sinebank creation:
-			sinebank = ( {
-				arg i;
+			// Pitch modulation:
+			freq = freq + LFNoise1.kr( pitchrate ).range( pitchmod * -1, pitchmod );
 
-				//Pan2.ar(SinOsc.ar( freq: ( freq * ( i + 1 ) ) + LFNoise1.kr(pitchrate).range(pitchmod * -1, pitchmod), mul: LinSelectX.kr( clippedMorph, oscPresets[i] ) ), LFNoise1.kr(panrate).range(panwidth * -1, panwidth * 1 ) );
-				SinOsc.ar( freq: freq * ( i + 1 ), mul: LinSelectX.kr( clippedMorph, oscPresets[i] ) );
-			} ! 16 ).sum;
+			// Sinebank creation:
+			sinebankOdd = ( { arg i; SinOsc.ar( freq: freq * ( ( ( i + 1 ) * 2 ) - 1 ), mul: LinSelectX.kr( clippedMorph, oscPresets[ i * 2 ] ) ) } ! 8 ).sum;
+			sinebankEven = ( { arg i; SinOsc.ar( freq: freq * ( ( i + 1 ) * 2  ), mul: LinSelectX.kr( clippedMorph, oscPresets[ ( i * 2 ) + 1 ] ) ) } ! 8 ).sum;
+			//sinebank = { arg i; SinOsc.ar( freq: freq * ( i + 1 ), mul: LinSelectX.kr( clippedMorph, oscPresets[ i ] ) ) } ! 16;
 
 			// Envelope modulating the main volume:
 			envelope = EnvGen.kr(Env.adsr( attackTime: attack, decayTime: decay, sustainLevel: sustain, releaseTime: release ), gate: gate, doneAction: 2 );
-			signal  = Pan2.ar( sinebank * envelope, 0 );
-			//signal  = sinebank * envelope;
+			signal  = ( Pan2.ar( sinebankOdd, LFNoise1.kr( panrate ).range( panwidth * -1, panwidth ) ) + Pan2.ar( sinebankEven, TRand.kr( panwidth * -1, panwidth, gate ) ) ) * envelope;
 			Out.ar( 0, signal * ( amp * 0.2 ) );
 
-	}).add;
+		}).add;
 
 		// Commands
 
