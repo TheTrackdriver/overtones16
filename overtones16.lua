@@ -677,20 +677,26 @@ end
 
 g.key = function(x,y,z)
   
-  if x == 16 and y == 1 then
+  if x == 12 and y == 1 then
     if z == 1 then
       gridpage = "grid page 1"
     end
   end
   
-  if x == 16 and y == 2 then
+  if x == 13 and y == 1 then
     if z == 1 then
       gridpage = "grid page 2"
     end
   end
+
+  if x == 14 and y == 1 then
+    if z == 1 then
+      gridpage = "grid page 3"
+    end
+  end
   
-  if x == 16 and y == 8 then
-    key_16_8_down = (z == 1)
+  if x == 16 and y == 1 then
+    key_16_1_down = (z == 1)
     return
   end
   
@@ -703,79 +709,34 @@ g.key = function(x,y,z)
   if gridpage == "grid page 1" then
 
 -- Bars --------------------------------------------------
-    if x <= 8 and z == 1 then
-      local param_id = "s"..slot_selection..x
-      if key_16_8_down then
-        local step_size = step[y] or 0
-        fine_tune_param(param_id, step_size * 0.01)
-        show_param_popup(param_id)
-        else
-          local current_val = params:get(param_id)
-          local current_y = math.floor(map(current_val, 0, 1, 8, 1))
-          ramp_param_to_value(param_id, current_y, y, 8, 1, 0, 1, ramp_speed)
+    if y >= 2 then
+      if z == 1 then
+        local param_id = "s"..slot_selection.."p"..x
+        if key_16_1_down then
+          local step_size = step[y] or 0
+          fine_tune_param(param_id, step_size * 0.01)
+          show_param_popup(param_id)
+          else
+            local current_val = params:get(param_id)
+            local current_y = math.floor(map(current_val, 0, 1, 8, 2))
+            ramp_param_to_value(param_id, current_y, y, 8, 2, 0, 1, ramp_speed)
+        end
       end
     end
 
 -- Slot selection ----------------------------------------
     if z == 1 then
-      if x == 9 and y == 1 then
+      if x == 7 and y == 1 then
         slot_selection = 1
         
-      elseif x == 9 and y == 3 then
+      elseif x == 8 and y == 1 then
         slot_selection = 2
         
-      elseif x == 9 and y == 5 then
+      elseif x == 9 and y == 1 then
         slot_selection = 3
         
-      elseif x == 9 and y == 7 then
+      elseif x == 10 and y == 1 then
         slot_selection = 4
-      end
-    end
-
--- Morph range -------------------------------------------
-    if x == 10 then
-      if z == 1 then
-        local param_id = "morphStart"
-        local current_val = params:get(param_id)
-        local current_y = math.floor(map(current_val, 0, 3, 1, 7))
-        ramp_param_to_value(param_id, current_y, y, 1, 7, 0, 3, ramp_speed)
-      end
-    end
-    
-    if x == 12 then
-      if z == 1 then
-        local param_id = "morphEnd"
-        local current_val = params:get(param_id)
-        local current_y = math.floor(map(current_val, 0, 3, 1, 7))
-        ramp_param_to_value(param_id, current_y, y, 1, 7, 0, 3, ramp_speed)
-      end
-    end
-
--- Morph lfo>rnd>env -------------------------------------
-    if x == 14 and z == 1 then
-      local param_id = "morphMixVal"
-      if key_16_8_down then
-        local step_size = step[y] or 0
-        fine_tune_param(param_id, step_size * 0.025)
-        show_param_popup(param_id)
-        else
-          local current_val = params:get(param_id)
-          local current_y = math.floor(map(current_val, 0, 2, 7, 1))
-          ramp_param_to_value(param_id, current_y, y, 7, 1, 0, 2, ramp_speed)
-      end
-    end
-        
--- Morph rate --------------------------------------------
-    if x == 15 and z == 1 then
-      local param_id = "morphRate"
-      if key_16_8_down then
-        local step_size = step[y] or 0
-        fine_tune_param(param_id, step_size * 0.1)
-        show_param_popup(param_id)
-        else
-          local current_val = params:get(param_id)
-          local current_y = math.floor(map(current_val, 0.1, 20, 8, 1))
-          ramp_param_to_value(param_id, current_y, y, 8, 1, 0.1, 20, ramp_speed)
       end
     end
   end
@@ -784,126 +745,184 @@ g.key = function(x,y,z)
 -- GRID PAGE 2 -------------------------------------------
 ----------------------------------------------------------
 
-  if gridpage == "grid page 2" then
+  if gridpage == "grid page 2" then  
 
--- Main volume -------------------------------------------
-    if x == 1 and z == 1 then
-      local param_id = "amp"
-      if key_16_8_down then
-        local step_size = step[y] or 0
-        fine_tune_param(param_id, step_size * 0.025)
-        show_param_popup(param_id)
-        else
-          local current_val = params:get(param_id)
-          local current_y = math.floor(map(current_val, 0, 1, 8, 1))
-          ramp_param_to_value(param_id, current_y, y, 8, 1, 0, 1, ramp_speed)
-      end
-    end
-
--- Envelope ----------------------------------------------
-    if x == 3 and z == 1 then
-      local param_id = "attack"
-      if key_16_8_down then
-        local step_size = step[y] or 0
-        fine_tune_param(param_id, step_size * 0.05)
-        show_param_popup(param_id)
-        else
-          local current_val = params:get(param_id)
-          local current_y = math.floor(map(current_val, 0.01, 10, 8, 1) + 0.5)
-          ramp_param_to_value(param_id, current_y, y, 8, 1, 0.01, 10, ramp_speed)
-      end
-    end
-
-    if x == 4 and z == 1 then
-      local param_id = "decay"
-      if key_16_8_down then
-        local step_size = step[y] or 0
-        fine_tune_param(param_id, step_size * 0.05)
-        show_param_popup(param_id)
-        else
-          local current_val = params:get(param_id)
-          local current_y = math.floor(map(current_val, 0.1, 10, 8, 1) + 0.5)
-          ramp_param_to_value(param_id, current_y, y, 8, 1, 0.1, 10, ramp_speed)
-      end
-    end
-
-    if x == 5 and z == 1 then
-      local param_id = "sustain"
-      if key_16_8_down then
-        local step_size = step[y] or 0
-        fine_tune_param(param_id, step_size * 0.025)
-        show_param_popup(param_id)
-        else
-          local current_val = params:get(param_id)
-          local current_y = math.floor(map(current_val, 0, 1, 8, 1))
-          ramp_param_to_value(param_id, current_y, y, 8, 1, 0, 1, ramp_speed)
-      end
-    end
-
-    if x == 6 and z == 1 then
-      local param_id = "release"
-      if key_16_8_down then
-        local step_size = step[y] or 0
-        fine_tune_param(param_id, step_size * 0.05)
-        show_param_popup(param_id)
-        else
-          local current_val = params:get(param_id)
-          local current_y = math.floor(map(current_val, 0.1, 10, 8, 1) + 0.5)
-          ramp_param_to_value(param_id, current_y, y, 8, 1, 0.1, 10, ramp_speed)
-      end
-    end
-
--- Pan width modulation ----------------------------------
-    if x == 8 and z == 1 then
-      local param_id = "panwidth"
-      if key_16_8_down then
-        local step_size = step[y] or 0
-        fine_tune_param(param_id, step_size * 0.025)
-        show_param_popup(param_id)
-        else
-          local current_val = params:get(param_id)
-          local current_y = math.floor(map(current_val, 0, 1, 8, 1))
-          ramp_param_to_value(param_id, current_y, y, 8, 1, 0, 1, ramp_speed)
+-- Morph range -------------------------------------------
+    if x == 1 then
+      if z == 1 then
+        local param_id = "morphStart"
+        local current_val = params:get(param_id)
+        local current_y = math.floor(map(current_val, 0, 3, 2, 8))
+        ramp_param_to_value(param_id, current_y, y, 2, 8, 0, 3, ramp_speed)
       end
     end
     
-    if x == 9 and z == 1 then
-      local param_id = "panrate"
-      if key_16_8_down then
-        local step_size = step[y] or 0
-        fine_tune_param(param_id, step_size * 0.1)
-        show_param_popup(param_id)
-        else
-          local current_val = params:get(param_id)
-          local current_y = math.floor(map(current_val, 0.1, 20, 8, 1) + 0.5)
-          ramp_param_to_value(param_id, current_y, y, 8, 1, 0.1, 20, ramp_speed)
-      end
-    end
-        
--- Pitch modulation --------------------------------------
-    if x == 11 and z == 1 then
-      local param_id = "pitchmod"
-      if key_16_8_down then
-        local step_size = step[y] or 0
-        fine_tune_param(param_id, step_size * 0.13)
-        show_param_popup(param_id)
-        else
-          local current_val = params:get(param_id)
-          local current_y = math.floor(map(current_val, 0, 26, 8, 1) + 0.5)
-          ramp_param_to_value(param_id, current_y, y, 8, 1, 0, 26, ramp_speed)
+    if x == 3 then
+      if z == 1 then
+        local param_id = "morphEnd"
+        local current_val = params:get(param_id)
+        local current_y = math.floor(map(current_val, 0, 3, 2, 8))
+        ramp_param_to_value(param_id, current_y, y, 2, 8, 0, 3, ramp_speed)
       end
     end
 
-    if x == 12 and z == 1 then
-      local param_id = "pitchrate"
-      if key_16_8_down then
-        local step_size = step[y] or 0
-        fine_tune_param(param_id, step_size * 0.1)
-        show_param_popup(param_id)
-        else
-          local current_val = params:get(param_id)
-          local current_y = math.floor(map(current_val, 0.1, 20, 8, 1) + 0.5)
-          ramp_param_to_value(param_id, current_y, y, 8, 1, 0.1, 20, ramp_speed)
+-- Morph lfo>rnd>env -------------------------------------
+    if y >= 2 then
+      if x == 5 and z == 1 then
+        local param_id = "morphMixVal"
+        if key_16_1_down then
+          local step_size = step[y] or 0
+          fine_tune_param(param_id, step_size * 0.025)
+          show_param_popup(param_id)
+          else
+            local current_val = params:get(param_id)
+            local current_y = math.floor(map(current_val, 0, 2, 8, 2))
+            ramp_param_to_value(param_id, current_y, y, 8, 2, 0, 2, ramp_speed)
+        end
+      end
+        
+-- Morph rate --------------------------------------------
+      if x == 7 and z == 1 then
+        local param_id = "morphRate"
+        if key_16_1_down then
+          local step_size = step[y] or 0
+          fine_tune_param(param_id, step_size * 0.1)
+          show_param_popup(param_id)
+          else
+            local current_val = params:get(param_id)
+            local current_y = math.floor(map(current_val, 0.1, 20, 8, 2))
+            ramp_param_to_value(param_id, current_y, y, 8, 2, 0.1, 20, ramp_speed)
+        end
+      end
+    end
+  end
+
+----------------------------------------------------------
+-- GRID PAGE 3 -------------------------------------------
+----------------------------------------------------------
+
+  if gridpage == "grid page 3" then
+
+-- Main volume -------------------------------------------
+    if y >= 2 then
+      if x == 1 and z == 1 then
+        local param_id = "amp"
+        if key_16_1_down then
+          local step_size = step[y] or 0
+          fine_tune_param(param_id, step_size * 0.025)
+          show_param_popup(param_id)
+          else
+            local current_val = params:get(param_id)
+            local current_y = math.floor(map(current_val, 0, 1, 8, 2))
+            ramp_param_to_value(param_id, current_y, y, 8, 2, 0, 1, ramp_speed)
+        end
+      end
+
+-- Envelope ----------------------------------------------
+      if x == 3 and z == 1 then
+        local param_id = "attack"
+        if key_16_1_down then
+          local step_size = step[y] or 0
+          fine_tune_param(param_id, step_size * 0.05)
+          show_param_popup(param_id)
+          else
+            local current_val = params:get(param_id)
+            local current_y = math.floor(map(current_val, 0.01, 10, 8, 2) + 0.5)
+            ramp_param_to_value(param_id, current_y, y, 8, 2, 0.01, 10, ramp_speed)
+        end
+      end
+
+      if x == 4 and z == 1 then
+        local param_id = "decay"
+        if key_16_1_down then
+          local step_size = step[y] or 0
+          fine_tune_param(param_id, step_size * 0.05)
+          show_param_popup(param_id)
+          else
+            local current_val = params:get(param_id)
+            local current_y = math.floor(map(current_val, 0.1, 10, 8, 2) + 0.5)
+            ramp_param_to_value(param_id, current_y, y, 8, 2, 0.1, 10, ramp_speed)
+        end
+      end
+
+      if x == 5 and z == 1 then
+        local param_id = "sustain"
+        if key_16_1_down then
+          local step_size = step[y] or 0
+          fine_tune_param(param_id, step_size * 0.025)
+          show_param_popup(param_id)
+          else
+            local current_val = params:get(param_id)
+            local current_y = math.floor(map(current_val, 0, 1, 8, 2))
+            ramp_param_to_value(param_id, current_y, y, 8, 2, 0, 1, ramp_speed)
+        end
+      end
+
+      if x == 6 and z == 1 then
+        local param_id = "release"
+        if key_16_1_down then
+          local step_size = step[y] or 0
+          fine_tune_param(param_id, step_size * 0.05)
+          show_param_popup(param_id)
+          else
+            local current_val = params:get(param_id)
+            local current_y = math.floor(map(current_val, 0.1, 10, 8, 2) + 0.5)
+            ramp_param_to_value(param_id, current_y, y, 8, 2, 0.1, 10, ramp_speed)
+        end
+      end
+
+-- Pan width modulation ----------------------------------
+      if x == 8 and z == 1 then
+        local param_id = "panwidth"
+        if key_16_1_down then
+          local step_size = step[y] or 0
+          fine_tune_param(param_id, step_size * 0.025)
+          show_param_popup(param_id)
+          else
+            local current_val = params:get(param_id)
+            local current_y = math.floor(map(current_val, 0, 1, 8, 2))
+            ramp_param_to_value(param_id, current_y, y, 8, 2, 0, 1, ramp_speed)
+        end
+      end
+    
+      if x == 9 and z == 1 then
+        local param_id = "panrate"
+        if key_16_1_down then
+          local step_size = step[y] or 0
+          fine_tune_param(param_id, step_size * 0.1)
+          show_param_popup(param_id)
+          else
+            local current_val = params:get(param_id)
+            local current_y = math.floor(map(current_val, 0.1, 20, 8, 2) + 0.5)
+            ramp_param_to_value(param_id, current_y, y, 8, 2, 0.1, 20, ramp_speed)
+        end
+      end
+        
+-- Pitch modulation --------------------------------------
+      if x == 11 and z == 1 then
+        local param_id = "pitchmod"
+        if key_16_1_down then
+          local step_size = step[y] or 0
+          fine_tune_param(param_id, step_size * 0.13)
+          show_param_popup(param_id)
+          else
+            local current_val = params:get(param_id)
+            local current_y = math.floor(map(current_val, 0, 26, 8, 2) + 0.5)
+            ramp_param_to_value(param_id, current_y, y, 8, 2, 0, 26, ramp_speed)
+        end
+      end
+
+      if x == 12 and z == 1 then
+        local param_id = "pitchrate"
+        if key_16_1_down then
+          local step_size = step[y] or 0
+          fine_tune_param(param_id, step_size * 0.1)
+          show_param_popup(param_id)
+          else
+            local current_val = params:get(param_id)
+            local current_y = math.floor(map(current_val, 0.1, 20, 8, 2) + 0.5)
+            ramp_param_to_value(param_id, current_y, y, 8, 2, 0.1, 20, ramp_speed)
+        end
       end
     end
   end
@@ -925,19 +944,25 @@ function grid_redraw()
 
 -- Page selectors ----------------------------------------
   if gridpage == "grid page 1" then
-        g:led(16, 1, 15)
+        g:led(12, 1, 15)
         else
-          g:led(16, 1, led_switch)
+          g:led(12, 1, led_switch)
   end
   
   if gridpage == "grid page 2" then
-        g:led(16, 2, 15)
+        g:led(13, 1, 15)
         else
-          g:led(16, 2, led_switch)
+          g:led(13, 1, led_switch)
+  end
+  
+  if gridpage == "grid page 3" then
+        g:led(14, 1, 15)
+        else
+          g:led(14, 1, led_switch)
   end
 
 -- Alt key -----------------------------------------------
-    g:led(16, 8, led_switch)
+    g:led(16, 1, led_switch)
 
 ----------------------------------------------------------
 -- GRID PAGE 1 -------------------------------------------
@@ -946,95 +971,43 @@ function grid_redraw()
   if gridpage == "grid page 1" then
 
 -- Bars --------------------------------------------------
-    for x = 1,8 do
-      for y = 1,7 do
+    for x = 1,16 do
+      for y = 2,8 do
       g:led(x, y, led_background)
       end
-      grid_bar_val = math.floor(map(params:get("s"..slot_selection.."p"..x), 0, 1, 8, 1) + 0.5)
+      grid_bar_val = math.floor(map(params:get("s"..slot_selection.."p"..x), 0, 1, 8, 2) + 0.5)
       for y = grid_bar_val,8 do
         if params:get("s"..slot_selection.."p"..x) == 0 then
           g:led(x, y, led_background)
           else
-            g:led(x, y, math.floor(map(y, 8, 1, led_ramp_start, 15) + 0.5))
+            g:led(x, y, math.floor(map(y, 8, 2, led_ramp_start, 15) + 0.5))
         end
       end
     end
     
 -- Slot selection ----------------------------------------
     if slot_selection == 1 then
+      g:led(7, 1, 15)
+      else
+        g:led(7, 1, led_switch)
+    end
+    
+    if slot_selection == 2 then
+      g:led(8, 1, 15)
+      else
+        g:led(8, 1, led_switch)
+    end
+    
+    if slot_selection == 3 then
       g:led(9, 1, 15)
       else
         g:led(9, 1, led_switch)
     end
     
-    if slot_selection == 2 then
-      g:led(9, 3, 15)
-      else
-        g:led(9, 3, led_switch)
-    end
-    
-    if slot_selection == 3 then
-      g:led(9, 5, 15)
-      else
-        g:led(9, 5, led_switch)
-    end
-    
     if slot_selection == 4 then
-      g:led(9, 7, 15)
+      g:led(10, 1, 15)
       else
-        g:led(9, 7, led_switch)
-    end
-
--- Morph range -------------------------------------------
-    grid_morphstart_val = math.floor(map(params:get("morphStart"), 0, 3, 1, 7))
-    grid_morphend_val = math.floor(map(params:get("morphEnd"), 0, 3, 1, 7))
-    
-    g:led(10, grid_morphstart_val, 15)
-    g:led(12, grid_morphend_val, 15)
-    
-    local lower = math.min(grid_morphstart_val, grid_morphend_val)
-    local upper = math.max(grid_morphstart_val, grid_morphend_val)
-    
-    for y = 1, 7 do
-      if y >= lower and y <= upper then
-        g:led(11, y, 15)
-        else
-          g:led(11, y, 5)
-      end
-    end
-
--- Morph lfo>rnd>env -------------------------------------
-    grid_morphmix_val = math.floor(map(params:get("morphMixVal"), 0, 2, 7, 1))
-    for y = 1,grid_morphmix_val do
-      g:led(14, y - 1, led_background)
-    end
-    for y = grid_morphmix_val, 7 do
-      g:led(14, y, 3)
-    end
-    
-    if grid_morphmix_val == 7 then
-      g:led(14, 7, 15)
-      else
-        g:led(14, 7, 6)
-    end
-    if grid_morphmix_val == 4 then
-      g:led(14, 4, 15)
-      else
-        g:led(14, 4, 6)
-    end
-    if grid_morphmix_val == 1 then
-      g:led(14, 1, 15)
-      else
-        g:led(14, 1, 6)
-    end
-    
--- Morph rate --------------------------------------------
-    grid_morphrate_val = math.floor(map(params:get("morphRate"), 0.1, 20, 8, 1) + 0.5)
-    for y = 1,7 do
-      g:led(15, y, led_background)
-    end
-    for y = grid_morphrate_val,8 do
-      g:led(15, y, math.floor(map(y, 8, 1, led_ramp_start, 15) + 0.5))
+        g:led(10, 1, led_switch)
     end
   end
 
@@ -1044,96 +1017,160 @@ function grid_redraw()
 
   if gridpage == "grid page 2" then
 
+-- Morph range -------------------------------------------
+    for i = 0,3 do
+      g:led(1, 2 + (i * 2), 3)
+      g:led(3, 2 + (i * 2), 3)
+    end
+
+    grid_morphstart_val = math.floor(map(params:get("morphStart"), 0, 3, 2, 8))
+    grid_morphend_val = math.floor(map(params:get("morphEnd"), 0, 3, 2, 8))
+    
+    g:led(1, grid_morphstart_val, 15)
+    g:led(3, grid_morphend_val, 15)
+    
+    local lower = math.min(grid_morphstart_val, grid_morphend_val)
+    local upper = math.max(grid_morphstart_val, grid_morphend_val)
+    
+    for y = 2, 8 do
+      if y >= lower and y <= upper then
+        g:led(2, y, 15)
+        else
+          g:led(2, y, 3)
+      end
+    end
+
+-- Morph lfo>rnd>env -------------------------------------
+    grid_morphmix_val = math.floor(map(params:get("morphMixVal"), 0, 2, 8, 2))
+    for y = 2,grid_morphmix_val do
+      g:led(5, y, led_background)
+    end
+    for y = grid_morphmix_val, 8 do
+      g:led(5, y, 3)
+    end
+    
+    if grid_morphmix_val == 8 then
+      g:led(5, 8, 15)
+      else
+        g:led(5, 8, 6)
+    end
+    if grid_morphmix_val == 5 then
+      g:led(5, 5, 15)
+      else
+        g:led(5, 5, 6)
+    end
+    if grid_morphmix_val == 2 then
+      g:led(5, 2, 15)
+      else
+        g:led(5, 2, 6)
+    end
+    
+-- Morph rate --------------------------------------------
+    grid_morphrate_val = math.floor(map(params:get("morphRate"), 0.1, 20, 8, 2) + 0.5)
+    for y = 2,8 do
+      g:led(7, y, led_background)
+    end
+    for y = grid_morphrate_val,8 do
+      g:led(7, y, math.floor(map(y, 8, 2, led_ramp_start, 15) + 0.5))
+    end
+  end
+
+----------------------------------------------------------
+-- GRID PAGE 3 -------------------------------------------
+----------------------------------------------------------
+
+  if gridpage == "grid page 3" then
+
 -- Main volume -------------------------------------------
-    grid_amp_val = math.floor(map(params:get("amp"), 0, 1, 8, 1) + 0.5)
-    for y = 1,7 do
+    grid_amp_val = math.floor(map(params:get("amp"), 0, 1, 8, 2) + 0.5)
+    for y = 2,8 do
       g:led(1, y, led_background)
     end
     for y = grid_amp_val, 8 do
       if params:get("amp") == 0 then
         g:led(1, y, led_background)
         else
-          g:led(1, y, math.floor(map(y, 8, 1, led_ramp_start, 15) + 0.5))
+          g:led(1, y, math.floor(map(y, 8, 2, led_ramp_start, 15) + 0.5))
       end
     end
 
 -- Envelope ----------------------------------------------
-    grid_attack_val = math.floor(map(params:get("attack"), 0.01, 10, 8, 1) + 0.5)
-    for y = 1,7 do
+    grid_attack_val = math.floor(map(params:get("attack"), 0.01, 10, 8, 2) + 0.5)
+    for y = 2,8 do
       g:led(3, y, led_background)
     end
     for y = grid_attack_val, 8 do
-      g:led(3, y, math.floor(map(y, 8, 1, led_ramp_start, 15) + 0.5))
+      g:led(3, y, math.floor(map(y, 8, 2, led_ramp_start, 15) + 0.5))
     end
     
-    grid_decay_val = math.floor(map(params:get("decay"), 0.1, 10, 8, 1) + 0.5)
-    for y = 1,7 do
+    grid_decay_val = math.floor(map(params:get("decay"), 0.1, 10, 8, 2) + 0.5)
+    for y = 2,8 do
       g:led(4, y, led_background)
     end
     for y = grid_decay_val, 8 do
-      g:led(4, y, math.floor(map(y, 8, 1, led_ramp_start, 15) + 0.5))
+      g:led(4, y, math.floor(map(y, 8, 2, led_ramp_start, 15) + 0.5))
     end
     
-    grid_sustain_val = math.floor(map(params:get("sustain"), 0, 1, 8, 1) + 0.5)
-    for y = 1,7 do
+    grid_sustain_val = math.floor(map(params:get("sustain"), 0, 1, 8, 2) + 0.5)
+    for y = 2,8 do
       g:led(5, y, led_background)
     end
     for y = grid_sustain_val, 8 do
       if params:get("sustain") == 0 then
         g:led(5, y, led_background)
         else
-          g:led(5, y, math.floor(map(y, 8, 1, led_ramp_start, 15) + 0.5))
+          g:led(5, y, math.floor(map(y, 8, 2, led_ramp_start, 15) + 0.5))
       end
     end
     
-    grid_release_val = math.floor(map(params:get("release"), 0.1, 10, 8, 1) + 0.5)
-    for y = 1,7 do
+    grid_release_val = math.floor(map(params:get("release"), 0.1, 10, 8, 2) + 0.5)
+    for y = 2,8 do
       g:led(6, y, led_background)
     end
     for y = grid_release_val, 8 do
-      g:led(6, y, math.floor(map(y, 8, 1, led_ramp_start, 15) + 0.5))
+      g:led(6, y, math.floor(map(y, 8, 2, led_ramp_start, 15) + 0.5))
     end
   
 -- Pan width modulation ----------------------------------
-    grid_panwidth_val = math.floor(map(params:get("panwidth"), 0, 1, 8, 1) + 0.5)
-    for y = 1,7 do
+    grid_panwidth_val = math.floor(map(params:get("panwidth"), 0, 1, 8, 2) + 0.5)
+    for y = 2,8 do
       g:led(8, y, led_background)
     end
     for y = grid_panwidth_val, 8 do
       if params:get("panwidth") == 0 then
         g:led(8, y, led_background)
         else
-          g:led(8, y, math.floor(map(y, 8, 1, led_ramp_start, 15) + 0.5))
+          g:led(8, y, math.floor(map(y, 8, 2, led_ramp_start, 15) + 0.5))
       end
     end
     
-    grid_panrate_val = math.floor(map(params:get("panrate"), 0.1, 20, 8, 1) + 0.5)
-    for y = 1,7 do
+    grid_panrate_val = math.floor(map(params:get("panrate"), 0.1, 20, 8, 2) + 0.5)
+    for y = 2,8 do
       g:led(9, y, led_background)
     end
     for y = grid_panrate_val, 8 do
-      g:led(9, y, math.floor(map(y, 8, 1, led_ramp_start, 15) + 0.5))
+      g:led(9, y, math.floor(map(y, 8, 2, led_ramp_start, 15) + 0.5))
     end
     
 -- Pitch modulation --------------------------------------
-    grid_pitchmod_val = math.floor(map(params:get("pitchmod"), 0, 26, 8, 1) + 0.5)
-    for y = 1,7 do
+    grid_pitchmod_val = math.floor(map(params:get("pitchmod"), 0, 26, 8, 2) + 0.5)
+    for y = 2,8 do
       g:led(11, y, led_background)
     end
     for y = grid_pitchmod_val, 8 do
       if params:get("pitchmod") == 0 then
         g:led(11, y, led_background)
         else
-          g:led(11, y, math.floor(map(y, 8, 1, led_ramp_start, 15) + 0.5))
+          g:led(11, y, math.floor(map(y, 8, 2, led_ramp_start, 15) + 0.5))
       end
     end
     
-    grid_pitchrate_val = math.floor(map(params:get("pitchrate"), 0.1, 20, 8, 1) + 0.5)
-    for y = 1,7 do
+    grid_pitchrate_val = math.floor(map(params:get("pitchrate"), 0.1, 20, 8, 2) + 0.5)
+    for y = 2,8 do
       g:led(12, y, led_background)
     end
     for y = grid_pitchrate_val, 8 do
-      g:led(12, y, math.floor(map(y, 8, 1, led_ramp_start, 15) + 0.5))
+      g:led(12, y, math.floor(map(y, 8, 2, led_ramp_start, 15) + 0.5))
     end
   end
   g:refresh()
